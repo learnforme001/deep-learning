@@ -1,10 +1,10 @@
 import torch
 from torch import nn
-from .base import load_data_fashion_mnist, train_ch3, predict_ch3
+from basic import Train, FashionMnist
 
 def soft_max_torch():
     batch_size = 256
-    trans_iter, test_iter = load_data_fashion_mnist(batch_size)
+    trans_iter, test_iter = FashionMnist.load_data_fashion_mnist(batch_size)
 
     net = nn.Sequential(nn.Flatten(), nn.Linear(784, 10))
 
@@ -19,7 +19,7 @@ def soft_max_torch():
     updater = torch.optim.SGD(net.parameters(), lr)
 
     num_epochs = 10
-    train_ch3(net, trans_iter, test_iter, loss, num_epochs, updater)
-    predict_ch3(net, test_iter)
+    Train.train_ch3(net, trans_iter, test_iter, loss, num_epochs, updater)
+    Train.predict_ch3(net, test_iter)
 
 

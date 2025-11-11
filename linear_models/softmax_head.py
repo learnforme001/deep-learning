@@ -1,5 +1,6 @@
-from .base import load_data_fashion_mnist, sgd, train_ch3, predict_ch3
+from .base import sgd
 import torch
+from basic import Train, FashionMnist
     
 def softmax(X):
     X_exp = torch.exp(X)
@@ -12,7 +13,7 @@ def cross_entropy(y_hat, y):
 
 def soft_max_head():
     batch_size = 256
-    trans_iter, test_iter = load_data_fashion_mnist(batch_size)
+    trans_iter, test_iter = FashionMnist.load_data_fashion_mnist(batch_size)
     
     num_inputs = 784
     num_outputs = 10
@@ -27,8 +28,8 @@ def soft_max_head():
         return sgd([W, b], lr, batch_size)
 
     num_epochs = 10
-    train_ch3(net, trans_iter, test_iter, cross_entropy, num_epochs, updater)
-    predict_ch3(net, test_iter)
+    Train.train_ch3(net, trans_iter, test_iter, cross_entropy, num_epochs, updater)
+    Train.predict_ch3(net, test_iter)
 
 
 

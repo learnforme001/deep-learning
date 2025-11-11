@@ -43,10 +43,11 @@ def _choose_backend():
 
 _choose_backend()
 
-from linear_models import soft_max_torch
+from linear_models import soft_max_head, soft_max_torch
+from multilayer_perceptron import mlp_head, mlp_torch
 import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
-    soft_max_torch()
+    mlp_torch()
     # Keep figures open when running as a script
     plt.show()
