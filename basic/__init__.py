@@ -5,3 +5,4 @@ from .Accumulator import Accumulator
 from .Train import Train
 from .FashionMnist import FashionMnist
 from .ActivateFunction import ActivateFunction
+from .Data import Data

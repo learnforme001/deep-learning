@@ -1,19 +1,14 @@
 from base import synthetic_data
-import numpy as np
-from torch.utils import data
 from torch import nn
+from basic.Data import Data
 import torch
-
-def load_array(data_arrays, batch_size):
-    dataset = data.TensorDataset(*data_arrays)
-    return data.DataLoader(dataset, batch_size, shuffle=True)
 
 if __name__ == '__main__':
     true_w = torch.tensor([2, -3.4])
     true_b = 4.2
     features, labels = synthetic_data(true_w, true_b, 1000)
     batch_size = 10
-    data_iter = load_array((features, labels), batch_size)
+    data_iter = Data.load_array((features, labels), batch_size)
 
     net = nn.Sequential(nn.Linear(2, 1))
     net[0].weight.data.normal_(0, 0.01)
