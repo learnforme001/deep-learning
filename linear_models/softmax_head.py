@@ -1,4 +1,4 @@
-from .base import sgd
+from basic import Train
 import torch
 from basic import Train, FashionMnist
     
@@ -25,7 +25,7 @@ def soft_max_head():
 
     lr = 0.1
     def updater(batch_size):
-        return sgd([W, b], lr, batch_size)
+        return Train.sgd([W, b], lr, batch_size)
 
     num_epochs = 10
     Train.train_ch3(net, trans_iter, test_iter, cross_entropy, num_epochs, updater)

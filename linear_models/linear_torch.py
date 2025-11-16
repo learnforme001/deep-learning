@@ -1,4 +1,3 @@
-from base import synthetic_data
 from torch import nn
 from basic.Data import Data
 import torch
@@ -6,7 +5,7 @@ import torch
 if __name__ == '__main__':
     true_w = torch.tensor([2, -3.4])
     true_b = 4.2
-    features, labels = synthetic_data(true_w, true_b, 1000)
+    features, labels = Data.synthetic_data(true_w, true_b, 1000)
     batch_size = 10
     data_iter = Data.load_array((features, labels), batch_size)
 

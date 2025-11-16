@@ -1,5 +1,6 @@
 import torch
-from base import synthetic_data, data_iter
+from base import data_iter
+from basic import Data
 
 
 
@@ -22,7 +23,7 @@ def sgd(params, lr, batch_size):
 if __name__ == '__main__':
     true_w = torch.tensor([2, -3.4])
     true_b = 4.2
-    features, labels = synthetic_data(true_w, true_b, 1000)
+    features, labels = Data.synthetic_data(true_w, true_b, 1000)
     # for X, y in data_iter(10, features, labels):
     #     print(X, '\n', y)
     #     break

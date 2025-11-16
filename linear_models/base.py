@@ -2,13 +2,6 @@ import torch
 import random
 from basic import FashionMnist
 
-def synthetic_data(w, b, num_examples):
-    """生成 y = X w + b + 噪声"""
-    X = torch.normal(0, 1, (num_examples, len(w)))
-    y = torch.matmul(X, w) + b
-    y += torch.normal(0, 0.01, y.shape)
-    return X, y.reshape((-1, 1))
-
 def data_iter(batch_size, features, labels):
     """构造一个迭代器来遍历数据集"""
     num_examples = len(features)
@@ -18,10 +11,3 @@ def data_iter(batch_size, features, labels):
         batch_indices = torch.tensor(
             indices[i: min(i + batch_size, num_examples)]) # 花式索引
         yield features[batch_indices], labels[batch_indices]
-
-def sgd(params, lr, batch_size):
-    """小批量随机梯度下降"""
-    with torch.no_grad():
-        for param in params:
-            param -= lr * param.grad / batch_size
-            param.grad.zero_()

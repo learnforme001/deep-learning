@@ -5,6 +5,23 @@ from .FashionMnist import FashionMnist
 
 class Train:
     @classmethod
+    def sgd(cls, params, lr, batch_size):
+        """小批量随机梯度下降"""
+        with torch.no_grad():
+            for param in params:
+                param -= lr * param.grad / batch_size
+                param.grad.zero_()
+
+    @classmethod
+    def evaluate_loss(cls, net, data_iter, loss):
+        acc = Accumulator(2)
+        for X, y in data_iter:
+            out = net(X)
+            l = loss(out, y)
+            acc.add(l.sum(), l.numel())
+        return acc[0] / acc[1]
+
+    @classmethod
     def accuracy(cls, y_hat, y):
         """计算预测正确的数量"""
         if len(y_hat.shape) > 1 and y_hat.shape[1] > 1:

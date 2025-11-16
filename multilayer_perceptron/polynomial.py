@@ -26,14 +26,6 @@ def get_poly_data():
                                                          poly_features, labels]]
     return true_w, features, poly_features, labels
 
-def evaluate_loss(net, data_iter, loss):
-    acc = Accumulator(2)
-    for X, y in data_iter:
-        out = net(X)
-        l = loss(out, y)
-        acc.add(l.sum(), l.numel())
-    return acc[0] / acc[1]
-
 def train(train_features, test_features, train_labels, test_labels, num_epochs=400):
     loss = nn.MSELoss(reduction='none')
     input_shape = train_features.shape[-1]
@@ -48,8 +40,8 @@ def train(train_features, test_features, train_labels, test_labels, num_epochs=4
     for epoch in range(num_epochs):
         Train.train_epoch_ch3(net, train_iter, loss, trainer)
         if epoch == 0 or (epoch + 1) % 20 == 0:
-            animator.add(epoch + 1, (evaluate_loss(net, train_iter, loss),
-                                    evaluate_loss(net, test_iter, loss)))
+            animator.add(epoch + 1, (Train.evaluate_loss(net, train_iter, loss),
+                                    Train.evaluate_loss(net, test_iter, loss)))
     print('weight:', net[0].weight.data.numpy())
 
 def train_3d_poly():

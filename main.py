@@ -44,10 +44,10 @@ def _choose_backend():
 _choose_backend()
 
 from linear_models import soft_max_head, soft_max_torch
-from multilayer_perceptron import mlp_head, mlp_torch, train_3d_poly, train_linear_poly, train_high_degree_poly
+from multilayer_perceptron import mlp_head, mlp_torch, train_3d_poly, train_linear_poly, train_high_degree_poly, weight_decay_head, weight_decay_torch
 import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
-    train_high_degree_poly()
+    weight_decay_torch(10)
     # Keep figures open when running as a script
     plt.show()
