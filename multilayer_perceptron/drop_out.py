@@ -48,7 +48,7 @@ def dropout_head():
     loss = nn.CrossEntropyLoss(reduction='none')
     train_iter, test_iter = FashionMnist.load_data_fashion_mnist(batch_size)
     trainer = torch.optim.SGD(net.parameters(), lr=lr)
-    Train.train_ch3(net, train_iter, test_iter, loss, num_epochs, trainer)
+    Train.train_ch3(net, train_iter, test_iter, loss, num_epochs, trainer, save_path='outputs/dropout_head.png')
 
 def dropout_torch():
     """使用PyTorch内置dropout层的多层感知机"""
@@ -66,4 +66,4 @@ def dropout_torch():
     loss = nn.CrossEntropyLoss(reduction='none')
     train_iter, test_iter = FashionMnist.load_data_fashion_mnist(batch_size)
     trainer = torch.optim.SGD(net.parameters(), lr=lr)
-    Train.train_ch3(net, train_iter, test_iter, loss, num_epochs, trainer)
+    Train.train_ch3(net, train_iter, test_iter, loss, num_epochs, trainer, save_path='outputs/dropout_torch.png')

@@ -27,11 +27,14 @@ def squared_loss(y_hat, y):
     return (y_hat - y.reshape(y_hat.shape)) ** 2 / 2
 
 def train(lambd):
+    import os
+    os.makedirs('outputs', exist_ok=True)
     w, b = init_params()
     net, loss = lambda X: linreg(X, w, b), squared_loss
     num_epochs, lr = 100, 0.003
     animator = Animator(xlabel='epochs', ylabel='loss', yscale='log',
-                            xlim=[5, num_epochs], legend=['train', 'test'])
+                            xlim=[5, num_epochs], legend=['train', 'test'],
+                            save_path='outputs/weight_decay_head.png')
     for epoch in range(num_epochs):
         for X, y in train_iter:
             # 增加了L2范数惩罚项，
@@ -49,6 +52,8 @@ def weight_decay_head(lambda_):
     train(lambda_)
 
 def weight_decay_torch(wd):
+    import os
+    os.makedirs('outputs', exist_ok=True)
     net = nn.Sequential(nn.Linear(num_inputs, 1))
     for param in net.parameters():
         param.data.normal_()
@@ -59,7 +64,8 @@ def weight_decay_torch(wd):
         {"params":net[0].weight,'weight_decay': wd},
         {"params":net[0].bias}], lr=lr)
     animator = Animator(xlabel='epochs', ylabel='loss', yscale='log',
-                            xlim=[5, num_epochs], legend=['train', 'test'])
+                            xlim=[5, num_epochs], legend=['train', 'test'],
+                            save_path='outputs/weight_decay_torch.png')
     for epoch in range(num_epochs):
         for X, y in train_iter:
             trainer.zero_grad()

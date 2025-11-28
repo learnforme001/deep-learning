@@ -19,7 +19,7 @@ def soft_max_torch():
     updater = torch.optim.SGD(net.parameters(), lr)
 
     num_epochs = 10
-    Train.train_ch3(net, trans_iter, test_iter, loss, num_epochs, updater)
-    Train.predict_ch3(net, test_iter)
+    Train.train_ch3(net, trans_iter, test_iter, loss, num_epochs, updater, save_path='outputs/softmax_torch_train.png')
+    Train.predict_ch3(net, test_iter, save_path='outputs/softmax_torch_predict.png')
 
 

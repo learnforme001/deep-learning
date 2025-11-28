@@ -1,6 +1,7 @@
 from .Figure import Figure
 import matplotlib.pyplot as plt
 from IPython import display as ipy_display
+import os
 
 
 def _in_notebook():
@@ -14,13 +15,14 @@ def _in_notebook():
 class Animator:
     def __init__(self, xlabel=None, ylabel=None, legend=None, xlim=None,
                  ylim=None, xscale='linear', yscale='linear', fmts=('-', '--', '-.', ':'),
-                 nrows=1, ncols=1, figsize=(3.5, 2.5)):
+                 nrows=1, ncols=1, figsize=(3.5, 2.5), save_path=None):
         if legend is None:
             legend = []
         Figure.use_svg_display()
         self._in_notebook = _in_notebook()
         # Track if a window has been shown in script mode
         self._shown_once = False
+        self.save_path = save_path
         self.fig, self.axes = plt.subplots(nrows, ncols, figsize=figsize)
         if nrows * ncols == 1:
             self.axes = [self.axes, ]
@@ -63,20 +65,11 @@ class Animator:
             ipy_display.display(self.fig)
             ipy_display.clear_output(wait=True)
         else:
-            # Ensure a window is opened once in script mode
-            if not self._shown_once:
-                try:
-                    # Matplotlib >= 3.0
-                    plt.show(block=False)
-                except TypeError:
-                    # Fallback for older versions
-                    self.fig.show()
-                self._shown_once = True
-            # Update the GUI figure window
-            self.fig.canvas.draw_idle()
-            try:
-                self.fig.canvas.flush_events()
-            except Exception:
-                pass
-            # Process GUI events; keep UI responsive
-            plt.pause(0.001)
+            # 在非notebook环境下保存图片
+            if self.save_path:
+                # 确保输出目录存在
+                os.makedirs(os.path.dirname(self.save_path) if os.path.dirname(self.save_path) else '.', exist_ok=True)
+                self.fig.savefig(self.save_path, dpi=200, bbox_inches='tight')
+                if not self._shown_once:
+                    print(f"图片已保存到: {self.save_path}")
+                    self._shown_once = True

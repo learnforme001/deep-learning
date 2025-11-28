@@ -23,8 +23,9 @@ class FashionMnist:
             return False
 
     @classmethod
-    def show_images(cls, imgs, num_rows, num_cols, titles=None, scale=1.5):
+    def show_images(cls, imgs, num_rows, num_cols, titles=None, scale=1.5, save_path=None):
         """显示图像，imgs是1~4维的Tensor或者是一个图片（ndarray）组成的list或数组"""
+        import os
         figsize = (num_cols * scale, num_rows * scale)
         _, axes = plt.subplots(num_rows, num_cols, figsize=figsize)
         axes = axes.flatten()
@@ -42,8 +43,14 @@ class FashionMnist:
             # Let notebook display handle rendering
             pass
         else:
-            # Ensure a window appears when running as a script
-            plt.pause(0.001)
+            # 在非notebook环境下保存图片
+            if save_path:
+                os.makedirs(os.path.dirname(save_path) if os.path.dirname(save_path) else '.', exist_ok=True)
+                plt.savefig(save_path, dpi=200, bbox_inches='tight')
+                plt.close()
+                print(f'图片已保存到: {save_path}')
+            else:
+                plt.pause(0.001)
         return axes
 
     @classmethod

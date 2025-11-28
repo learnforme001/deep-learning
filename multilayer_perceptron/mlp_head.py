@@ -36,7 +36,7 @@ def mlp_head():
 
     num_epochs, lr = 10, 0.1
     updater = torch.optim.SGD(params, lr=lr)
-    Train.train_ch3(net, train_iter, test_iter, loss, num_epochs, updater)
-    Train.predict_ch3(net, test_iter)
+    Train.train_ch3(net, train_iter, test_iter, loss, num_epochs, updater, save_path='outputs/mlp_head_train.png')
+    Train.predict_ch3(net, test_iter, save_path='outputs/mlp_head_predict.png')
     
 

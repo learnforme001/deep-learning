@@ -89,6 +89,8 @@ def kaggle_house_price():
             train_l_sum += train_ls[-1]
             valid_l_sum += valid_ls[-1]
             if i == 0:
+                import os
+                os.makedirs('outputs', exist_ok=True)
                 epochs = list(range(1, num_epochs + 1))
                 plt.plot(epochs, train_ls, label='train')
                 plt.plot(epochs, valid_ls, label='valid')
@@ -97,7 +99,9 @@ def kaggle_house_price():
                 plt.xlim([1, num_epochs])
                 plt.yscale('log')
                 plt.legend()
-                plt.show()
+                plt.savefig('outputs/kaggle_k_fold.png', dpi=200, bbox_inches='tight')
+                plt.close()
+                print('图片已保存到: outputs/kaggle_k_fold.png')
             print(f'折{i + 1}，训练log rmse{float(train_ls[-1]):f}, '
                 f'验证log rmse{float(valid_ls[-1]):f}')
         return train_l_sum / k, valid_l_sum / k
@@ -110,6 +114,8 @@ def kaggle_house_price():
     
     def train_and_pred(train_features, test_features, train_labels, test_data,
                    num_epochs, lr, weight_decay, batch_size):
+        import os
+        os.makedirs('outputs', exist_ok=True)
         net = get_net()
         train_ls, _ = train(net, train_features, train_labels, None, None,
                             num_epochs, lr, weight_decay, batch_size)
@@ -120,7 +126,9 @@ def kaggle_house_price():
         plt.xlim([1, num_epochs])
         plt.yscale('log')
         plt.legend()
-        plt.show()
+        plt.savefig('outputs/kaggle_train_pred.png', dpi=200, bbox_inches='tight')
+        plt.close()
+        print('图片已保存到: outputs/kaggle_train_pred.png')
         print(f'训练log rmse：{float(train_ls[-1]):f}')
         # 将网络应用于测试集。
         preds = net(test_features).detach().numpy()

@@ -28,8 +28,8 @@ def soft_max_head():
         return Train.sgd([W, b], lr, batch_size)
 
     num_epochs = 10
-    Train.train_ch3(net, trans_iter, test_iter, cross_entropy, num_epochs, updater)
-    Train.predict_ch3(net, test_iter)
+    Train.train_ch3(net, trans_iter, test_iter, cross_entropy, num_epochs, updater, save_path='outputs/softmax_head_train.png')
+    Train.predict_ch3(net, test_iter, save_path='outputs/softmax_head_predict.png')
 
 
 

@@ -26,7 +26,11 @@ def get_poly_data():
                                                          poly_features, labels]]
     return true_w, features, poly_features, labels
 
-def train(train_features, test_features, train_labels, test_labels, num_epochs=400):
+def train(train_features, test_features, train_labels, test_labels, num_epochs=400, save_path=None):
+    import os
+    if save_path is None:
+        os.makedirs('outputs', exist_ok=True)
+        save_path = 'outputs/polynomial.png'
     loss = nn.MSELoss(reduction='none')
     input_shape = train_features.shape[-1]
     net = nn.Sequential(nn.Linear(input_shape, 1, bias=False))
@@ -36,7 +40,8 @@ def train(train_features, test_features, train_labels, test_labels, num_epochs=4
 
     trainer = torch.optim.SGD(net.parameters(), lr=0.01)
     animator = Animator(xlabel='epoch', ylabel='loss', yscale='log',
-                        xlim=[1, num_epochs], ylim=[1e-3, 1e2], legend=['train', 'test'])
+                        xlim=[1, num_epochs], ylim=[1e-3, 1e2], legend=['train', 'test'],
+                        save_path=save_path)
     for epoch in range(num_epochs):
         Train.train_epoch_ch3(net, train_iter, loss, trainer)
         if epoch == 0 or (epoch + 1) % 20 == 0:
@@ -47,14 +52,14 @@ def train(train_features, test_features, train_labels, test_labels, num_epochs=4
 def train_3d_poly():
     true_w, features, poly_features, labels = get_poly_data()
     train(poly_features[:n_train, :4], poly_features[n_train:, :4],
-          labels[:n_train], labels[n_train:])
+          labels[:n_train], labels[n_train:], save_path='outputs/train_3d_poly.png')
 
 def train_linear_poly():
     true_w, features, poly_features, labels = get_poly_data()
     train(poly_features[:n_train, :2], poly_features[n_train:, :2],
-          labels[:n_train], labels[n_train:])
+          labels[:n_train], labels[n_train:], save_path='outputs/train_linear_poly.png')
     
 def train_high_degree_poly():
     true_w, features, poly_features, labels = get_poly_data()
     train(poly_features[:n_train, :], poly_features[n_train:, :],
-          labels[:n_train], labels[n_train:], num_epochs=1500)
+          labels[:n_train], labels[n_train:], num_epochs=1500, save_path='outputs/train_high_degree_poly.png')

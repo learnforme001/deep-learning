@@ -61,10 +61,15 @@ class Train:
         return metric[0] / metric[2], metric[1] / metric[2]
 
     @classmethod
-    def train_ch3(cls, net, train_iter, test_iter, loss, num_epochs, updater):
+    def train_ch3(cls, net, train_iter, test_iter, loss, num_epochs, updater, save_path=None):
         """训练模型"""
+        import os
+        if save_path is None:
+            os.makedirs('outputs', exist_ok=True)
+            save_path = 'outputs/train_ch3.png'
         animator = Animator(xlabel='epoch', xlim=[1, num_epochs], ylim=[0.3, 0.9],
-                            legend=['train loss', 'train acc', 'test acc'])
+                            legend=['train loss', 'train acc', 'test acc'],
+                            save_path=save_path)
         for epoch in range(num_epochs):
             train_metrics = cls.train_epoch_ch3(net, train_iter, loss, updater)
             test_acc = cls.evaluate_accuracy(net, test_iter)
@@ -75,10 +80,14 @@ class Train:
         assert test_acc <= 1 and test_acc > 0.7, test_acc
 
     @classmethod
-    def predict_ch3(cls, net, test_iter, n=6):
+    def predict_ch3(cls, net, test_iter, n=6, save_path=None):
+        import os
+        if save_path is None:
+            os.makedirs('outputs', exist_ok=True)
+            save_path = 'outputs/predictions.png'
         for X, y in test_iter:
             break
         trues = FashionMnist.get_fashion_mnist_labels(y)
         preds = FashionMnist.get_fashion_mnist_labels(net(X).argmax(axis=1))
         titles = [true +'\n' + pred for true, pred in zip(trues, preds)]
-        FashionMnist.show_images(X[0:n].reshape((n, 28, 28)), 1, n, titles=titles[0:n])
+        FashionMnist.show_images(X[0:n].reshape((n, 28, 28)), 1, n, titles=titles[0:n], save_path=save_path)
