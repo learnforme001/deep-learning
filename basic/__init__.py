@@ -7,3 +7,4 @@ from .FashionMnist import FashionMnist
 from .ActivateFunction import ActivateFunction
 from .Data import Data
 from .DownloadHelper import DownloadHelper
+from .GPU import TryGPU

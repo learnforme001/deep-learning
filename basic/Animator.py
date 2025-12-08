@@ -18,11 +18,19 @@ class Animator:
                  nrows=1, ncols=1, figsize=(3.5, 2.5), save_path=None):
         if legend is None:
             legend = []
-        Figure.use_svg_display()
         self._in_notebook = _in_notebook()
+        
+        # 只在notebook环境下使用SVG显示
+        if self._in_notebook:
+            Figure.use_svg_display()
+        else:
+            # 在非notebook环境下启用交互式模式
+            plt.ion()  # 开启交互式模式
+        
         # Track if a window has been shown in script mode
         self._shown_once = False
         self.save_path = save_path
+        
         self.fig, self.axes = plt.subplots(nrows, ncols, figsize=figsize)
         if nrows * ncols == 1:
             self.axes = [self.axes, ]
@@ -30,6 +38,11 @@ class Animator:
         self.config_axes = lambda: self._set_axes(
             self.axes, xlabel, ylabel, xlim, ylim, xscale, yscale, legend)
         self.X, self.Y, self.fmts = None, None, fmts
+        
+        # 显示初始窗口
+        if not self._in_notebook:
+            plt.show(block=False)
+            plt.pause(0.001)
 
     def _set_axes(self, axes, xlabel, ylabel, xlim, ylim, xscale, yscale, legend):
         for ax in axes:
@@ -65,7 +78,12 @@ class Animator:
             ipy_display.display(self.fig)
             ipy_display.clear_output(wait=True)
         else:
-            # 在非notebook环境下保存图片
+            # 在非notebook环境下实时更新图形
+            self.fig.canvas.draw()
+            self.fig.canvas.flush_events()
+            plt.pause(0.001)  # 短暂暂停以允许图形更新
+            
+            # 保存图片（如果指定了路径）
             if self.save_path:
                 # 确保输出目录存在
                 os.makedirs(os.path.dirname(self.save_path) if os.path.dirname(self.save_path) else '.', exist_ok=True)
