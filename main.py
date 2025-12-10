@@ -8,7 +8,7 @@ import matplotlib
 
 from linear_models import soft_max_head, soft_max_torch
 from multilayer_perceptron import mlp_head, mlp_torch, train_3d_poly, train_linear_poly, train_high_degree_poly, weight_decay_head, weight_decay_torch, dropout_head, dropout_torch, kaggle_house_price
-from CNN import LeNet_main, AlexNet_main
+from CNN import LeNet_main, AlexNet_main, vgg_main
 import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
@@ -18,7 +18,7 @@ if __name__ == '__main__':
         print("已清空outputs目录")
     os.makedirs('outputs', exist_ok=True)
 
-    AlexNet_main()
+    vgg_main()
     
     # weight_decay_head(0.3)
     # 保持窗口打开
