@@ -8,7 +8,11 @@ def _in_notebook():
     try:
         from IPython import get_ipython
         ip = get_ipython()
-        return ip is not None and ip.__class__.__name__ == 'ZMQInteractiveShell'
+        if ip is None:
+            return False
+        # 检测Jupyter Notebook或Google Colab
+        shell_name = ip.__class__.__name__
+        return shell_name in ('ZMQInteractiveShell', 'Shell')
     except Exception:
         return False
 
@@ -19,6 +23,10 @@ class Animator:
         if legend is None:
             legend = []
         self._in_notebook = _in_notebook()
+        self._display_handle = None  # 用于更新display
+        
+        # 调试信息
+        print(f"[Animator] 初始化 - 环境: {'Notebook' if self._in_notebook else 'Script'}, Legend: {legend}")
         
         # 只在notebook环境下使用SVG显示
         if self._in_notebook:
@@ -74,9 +82,29 @@ class Animator:
         for x, y, fmt in zip(self.X, self.Y, self.fmts):
             self.axes[0].plot(x, y, fmt)
         self.config_axes()
+        
+        # 打印当前数据点（用于调试和查看训练进度）
+        # 只打印最新的数据点
+        latest_values = []
+        for i, y_vals in enumerate(self.Y):
+            if y_vals:
+                latest_values.append(f"{y_vals[-1]:.4f}")
+            else:
+                latest_values.append("N/A")
+        # 获取legend名称
+        legend = self.axes[0].get_legend()
+        if legend:
+            labels = [t.get_text() for t in legend.get_texts()]
+            print(f"[Animator] Epoch {x[-1] if hasattr(x, '__len__') else x:.2f}: " + 
+                  ", ".join([f"{label}={val}" for label, val in zip(labels, latest_values)]))
+        else:
+            print(f"[Animator] Epoch {x[-1] if hasattr(x, '__len__') else x:.2f}: " + 
+                  ", ".join(latest_values))
+        
         if self._in_notebook:
-            ipy_display.display(self.fig)
+            # 在notebook环境下使用清除+重新显示的方式（兼容性最好）
             ipy_display.clear_output(wait=True)
+            ipy_display.display(self.fig)
         else:
             # 在非notebook环境下实时更新图形
             self.fig.canvas.draw()
@@ -91,3 +119,12 @@ class Animator:
                 if not self._shown_once:
                     print(f"图片已保存到: {self.save_path}")
                     self._shown_once = True
+    
+    def show(self):
+        """显示最终图形（主要用于notebook环境保持最后的图形可见）"""
+        if self._in_notebook:
+            # 在notebook中最后一次显示，保持可见（不使用clear_output）
+            ipy_display.display(self.fig)
+        else:
+            # 在脚本环境中保持窗口打开
+            plt.show()

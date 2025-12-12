@@ -130,6 +130,7 @@ class Train:
         animator = Animator(xlabel='epoch', xlim=[1, num_epochs],
                                 legend=['train loss', 'train acc', 'test acc'])
         timer, num_batches = Timer(), len(train_iter)
+        print(f'[Train] 训练批次数: {num_batches}, 每轮更新次数: {max(1, num_batches // 5)}')
         for epoch in range(num_epochs):
             # 训练损失之和，训练准确率之和，样本数
             metric = Accumulator(3)
@@ -147,7 +148,9 @@ class Train:
                 timer.stop()
                 train_l = metric[0] / metric[2]
                 train_acc = metric[1] / metric[2]
-                if (i + 1) % (num_batches // 5) == 0 or i == num_batches - 1:
+                # 改进更新频率：至少每个epoch更新5次，如果batch太少就每次都更新
+                update_freq = max(1, num_batches // 5)
+                if (i + 1) % update_freq == 0 or i == num_batches - 1:
                     animator.add(epoch + (i + 1) / num_batches,
                                 (train_l, train_acc, None))
             test_acc = cls.evaluate_accuracy_gpu(net, test_iter)
@@ -156,3 +159,5 @@ class Train:
             f'test acc {test_acc:.3f}')
         print(f'{metric[2] * num_epochs / timer.sum():.1f} examples/sec '
             f'on {str(device)}')
+        # 显示最终图形
+        animator.show()
