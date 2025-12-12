@@ -80,32 +80,6 @@ class Animator:
             self.axes[0].plot(x, y, fmt)
         self.config_axes()
         
-        # 打印当前数据点（用于调试和查看训练进度）
-        if self._in_notebook:
-            # 只打印最新的数据点
-            latest_values = []
-            for i, y_vals in enumerate(self.Y):
-                if y_vals:
-                    latest_values.append(f"{y_vals[-1]:.4f}")
-                else:
-                    latest_values.append("N/A")
-            
-            # 获取当前epoch值
-            if self.X and self.X[0]:
-                current_epoch = self.X[0][-1]
-            else:
-                current_epoch = 0
-            
-            # 获取legend名称
-            legend = self.axes[0].get_legend()
-            if legend:
-                labels = [t.get_text() for t in legend.get_texts()]
-                print(f"Epoch {current_epoch:.2f}: " + 
-                      ", ".join([f"{label}={val}" for label, val in zip(labels, latest_values)]))
-            else:
-                print(f"Epoch {current_epoch:.2f}: " + 
-                      ", ".join(latest_values))
-        
         if self._in_notebook:
             # 在notebook环境下使用清除+重新显示的方式（兼容性最好）
             ipy_display.clear_output(wait=True)
@@ -115,15 +89,6 @@ class Animator:
             self.fig.canvas.draw()
             self.fig.canvas.flush_events()
             plt.pause(0.001)  # 短暂暂停以允许图形更新
-            
-            # 保存图片（如果指定了路径）
-            if self.save_path:
-                # 确保输出目录存在
-                os.makedirs(os.path.dirname(self.save_path) if os.path.dirname(self.save_path) else '.', exist_ok=True)
-                self.fig.savefig(self.save_path, dpi=200, bbox_inches='tight')
-                if not self._shown_once:
-                    print(f"图片已保存到: {self.save_path}")
-                    self._shown_once = True
     
     def show(self):
         """显示最终图形（主要用于notebook环境保持最后的图形可见）"""
