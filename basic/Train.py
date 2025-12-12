@@ -154,6 +154,7 @@ class Train:
                     animator.add(epoch + (i + 1) / num_batches,
                                 (train_l, train_acc, None))
             test_acc = cls.evaluate_accuracy_gpu(net, test_iter)
+            print(f'[Train] 第 {epoch + 1} 轮训练完毕. ', end='')
             animator.add(epoch + 1, (None, None, test_acc))
         print(f'loss {train_l:.3f}, train acc {train_acc:.3f}, '
             f'test acc {test_acc:.3f}')
