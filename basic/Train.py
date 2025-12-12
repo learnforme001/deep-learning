@@ -156,3 +156,5 @@ class Train:
             f'test acc {test_acc:.3f}')
         print(f'{metric[2] * num_epochs / timer.sum():.1f} examples/sec '
             f'on {str(device)}')
+        # 显示最终图形
+        animator.show()
