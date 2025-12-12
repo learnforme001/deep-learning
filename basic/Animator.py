@@ -83,24 +83,6 @@ class Animator:
             self.axes[0].plot(x, y, fmt)
         self.config_axes()
         
-        # 打印当前数据点（用于调试和查看训练进度）
-        # 只打印最新的数据点
-        latest_values = []
-        for i, y_vals in enumerate(self.Y):
-            if y_vals:
-                latest_values.append(f"{y_vals[-1]:.4f}")
-            else:
-                latest_values.append("N/A")
-        # 获取legend名称
-        legend = self.axes[0].get_legend()
-        if legend:
-            labels = [t.get_text() for t in legend.get_texts()]
-            print(f"[Animator] Epoch {x[-1] if hasattr(x, '__len__') else x:.2f}: " + 
-                  ", ".join([f"{label}={val}" for label, val in zip(labels, latest_values)]))
-        else:
-            print(f"[Animator] Epoch {x[-1] if hasattr(x, '__len__') else x:.2f}: " + 
-                  ", ".join(latest_values))
-        
         if self._in_notebook:
             # 在notebook环境下使用清除+重新显示的方式（兼容性最好）
             ipy_display.clear_output(wait=True)
