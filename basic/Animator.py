@@ -92,15 +92,6 @@ class Animator:
             self.fig.canvas.draw()
             self.fig.canvas.flush_events()
             plt.pause(0.001)  # 短暂暂停以允许图形更新
-            
-            # 保存图片（如果指定了路径）
-            if self.save_path:
-                # 确保输出目录存在
-                os.makedirs(os.path.dirname(self.save_path) if os.path.dirname(self.save_path) else '.', exist_ok=True)
-                self.fig.savefig(self.save_path, dpi=200, bbox_inches='tight')
-                if not self._shown_once:
-                    print(f"图片已保存到: {self.save_path}")
-                    self._shown_once = True
     
     def show(self):
         """显示最终图形（主要用于notebook环境保持最后的图形可见）"""
