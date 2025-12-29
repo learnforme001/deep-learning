@@ -8,7 +8,11 @@ def _in_notebook():
     try:
         from IPython import get_ipython
         ip = get_ipython()
-        return ip is not None and ip.__class__.__name__ == 'ZMQInteractiveShell'
+        if ip is None:
+            return False
+        # 检测Jupyter Notebook或Google Colab
+        shell_name = ip.__class__.__name__
+        return shell_name in ('ZMQInteractiveShell', 'Shell')
     except Exception:
         return False
 
@@ -19,6 +23,7 @@ class Animator:
         if legend is None:
             legend = []
         self._in_notebook = _in_notebook()
+        self._display_handle = None  # 用于更新display
         
         # 只在notebook环境下使用SVG显示
         if self._in_notebook:
@@ -74,9 +79,11 @@ class Animator:
         for x, y, fmt in zip(self.X, self.Y, self.fmts):
             self.axes[0].plot(x, y, fmt)
         self.config_axes()
+        
         if self._in_notebook:
-            ipy_display.display(self.fig)
+            # 在notebook环境下使用清除+重新显示的方式（兼容性最好）
             ipy_display.clear_output(wait=True)
+            ipy_display.display(self.fig)
         else:
             # 在非notebook环境下实时更新图形
             self.fig.canvas.draw()
@@ -150,3 +157,12 @@ class Animator:
         if grid:
             plt.grid(True)
         plt.show()
+    
+    def show(self):
+        """显示最终图形（主要用于notebook环境保持最后的图形可见）"""
+        if self._in_notebook:
+            # 在notebook中最后一次显示，保持可见（不使用clear_output）
+            ipy_display.display(self.fig)
+        else:
+            # 在脚本环境中保持窗口打开
+            plt.show()

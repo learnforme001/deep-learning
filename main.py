@@ -8,7 +8,7 @@ import matplotlib
 
 from linear_models import soft_max_head, soft_max_torch
 from multilayer_perceptron import mlp_head, mlp_torch, train_3d_poly, train_linear_poly, train_high_degree_poly, weight_decay_head, weight_decay_torch, dropout_head, dropout_torch, kaggle_house_price
-from CNN import LeNet_main, AlexNet_main, vgg_main, NiN_main
+from CNN import LeNet_main, AlexNet_main, vgg_main, NiN_main, GoogLeNet_main, BatchNorm_LeNet_main, Simple_BatchNorm_LeNet_main, ResNet_main, DenseNet_main
 from RNN import sequence_model_main
 import matplotlib.pyplot as plt
 
