@@ -91,3 +91,62 @@ class Animator:
                 if not self._shown_once:
                     print(f"图片已保存到: {self.save_path}")
                     self._shown_once = True
+    
+    @classmethod
+    def plot(cls, x, y, xlabel=None, ylabel=None, xlim=None, ylim=None, 
+             xscale='linear', yscale='linear', figsize=(6, 3), legend=None, grid=True):
+        """
+        便捷绘图方法，类似 d2l.plot 的使用方式
+        
+        参数:
+            x: x轴数据，可以是单个数组或数组列表（与y对应）
+            y: y轴数据，可以是单个数组或数组列表
+            xlabel: x轴标签
+            ylabel: y轴标签
+            xlim: x轴范围
+            ylim: y轴范围
+            xscale: x轴刻度类型
+            yscale: y轴刻度类型
+            figsize: 图形大小
+            legend: 图例
+            grid: 是否显示网格，默认True
+        
+        示例:
+            Animator.plot(time, [x], 'time', 'x', xlim=[1, 1000], figsize=(6, 3))
+            Animator.plot([time1, time2], [y1, y2], 'time', 'y', legend=['a', 'b'])
+        """
+        plt.figure(figsize=figsize)
+        
+        # 处理y数据
+        if not isinstance(y, list):
+            y = [y]
+        
+        # 处理x数据：如果x是列表，则为每个y提供对应的x；否则所有y共用一个x
+        if isinstance(x, list):
+            x_list = x
+        else:
+            x_list = [x] * len(y)
+        
+        # 绘制所有曲线
+        for x_data, y_data in zip(x_list, y):
+            plt.plot(x_data, y_data)
+        
+        # 设置坐标轴
+        if xlabel:
+            plt.xlabel(xlabel)
+        if ylabel:
+            plt.ylabel(ylabel)
+        if xlim:
+            plt.xlim(xlim)
+        if ylim:
+            plt.ylim(ylim)
+        
+        plt.xscale(xscale)
+        plt.yscale(yscale)
+        
+        if legend:
+            plt.legend(legend)
+        
+        if grid:
+            plt.grid(True)
+        plt.show()
