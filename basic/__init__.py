@@ -8,3 +8,4 @@ from .ActivateFunction import ActivateFunction
 from .Data import Data
 from .DownloadHelper import DownloadHelper
 from .GPU import TryGPU
+from .TextProcess import TextProcess, Vocab
