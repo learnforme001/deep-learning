@@ -1,2 +1,2 @@
 from .sequence_model import sequence_model_main
-from .text_processing import text_processing_main
+from .RNN_basic import RNN_head

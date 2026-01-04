@@ -85,7 +85,6 @@ class SeqDataLoader:  #@save
         Xs = torch.tensor(corpus[offset: offset + num_tokens])
         Ys = torch.tensor(corpus[offset + 1: offset + 1 + num_tokens])
         Xs, Ys = Xs.reshape(batch_size, -1), Ys.reshape(batch_size, -1)
-        print(Xs)
         num_batches = Xs.shape[1] // num_steps
         for i in range(0, num_steps * num_batches, num_steps):
             X = Xs[:, i: i + num_steps]
