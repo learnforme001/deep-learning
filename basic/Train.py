@@ -193,10 +193,12 @@ class Train:
         state, timer = None, Timer()
         metric = Accumulator(2)  # 训练损失之和,词元数量
         for X, Y in train_iter:
+            # 处理隐状态
             if state is None or use_random_iter:
                 # 在第一次迭代或使用随机抽样时初始化state
                 state = net.begin_state(batch_size=X.shape[0], device=device)
             else:
+                # detach从计算图分离隐状态，不再进行回传
                 if isinstance(net, nn.Module) and not isinstance(state, tuple):
                     # state对于nn.GRU是个张量
                     state.detach_()
@@ -204,19 +206,24 @@ class Train:
                     # state对于nn.LSTM或对于我们从零开始实现的模型是个张量
                     for s in state:
                         s.detach_()
+            # 前向传播
             y = Y.T.reshape(-1)
             X, y = X.to(device), y.to(device)
             y_hat, state = net(X, state)
+            # 计算loss
             l = loss(y_hat, y.long()).mean()
+            # 反向传播和梯度裁剪
             if isinstance(updater, torch.optim.Optimizer):
                 updater.zero_grad()
                 l.backward()
                 cls.grad_clipping(net, 1)
+                # 更新参数
                 updater.step()
             else:
                 l.backward()
                 cls.grad_clipping(net, 1)
                 # 因为已经调用了mean函数
+                # 更新参数
                 updater(batch_size=1)
             metric.add(l * y.numel(), y.numel())
         return math.exp(metric[0] / metric[1]), metric[1] / timer.stop()

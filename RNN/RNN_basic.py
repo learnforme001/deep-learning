@@ -69,3 +69,4 @@ def RNN_head(use_random_iter=False):
                             init_rnn_state, rnn)
     num_epochs, lr = 500, 1
     Train.train_ch8(net, train_iter, vocab, lr, num_epochs, TryGPU.try_gpu(), use_random_iter=use_random_iter)
+
