@@ -11,3 +11,4 @@ from .GPU import TryGPU
 from .TextProcess import TextProcess
 from .Vocab import Vocab
 from .SeqDataLoader import SeqDataLoader
+from .NMT import NMT
