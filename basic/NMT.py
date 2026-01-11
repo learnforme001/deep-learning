@@ -46,7 +46,7 @@ class NMT:
     
 
     @classmethod
-    def truncate_pad(line, num_steps, padding_token):
+    def truncate_pad(cls, line, num_steps, padding_token):
         """截断或填充文本序列"""
         if len(line) > num_steps:
             return line[:num_steps]  # 截断
