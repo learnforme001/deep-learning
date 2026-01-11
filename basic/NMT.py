@@ -6,7 +6,7 @@ from .Data import Data
 
 class NMT:
     @classmethod
-    def read_time_machine(cls):
+    def read_data_nmt(cls):
         """读取《时光机器》数据集"""
         DATA_HUB = DownloadHelper.DATA_HUB
         DATA_HUB['fra-eng'] = (DownloadHelper.DATA_URL + 'fra-eng.zip',
