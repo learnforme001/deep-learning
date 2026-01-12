@@ -14,6 +14,6 @@ from .SeqDataLoader import SeqDataLoader
 from .NMT import NMT
 from .AttentionHelper import AttentionHelper
 
-from .attentions import AdditiveAttention, DotProductionAttention, Seq2SeqAttentionDecoder
+from .attentions import AdditiveAttention, DotProductionAttention, Seq2SeqAttentionDecoder, MultiHeadAttention
 
 from .EncoderDecoder import EncoderDecoder, Encoder, Decoder
