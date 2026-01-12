@@ -12,3 +12,4 @@ from .TextProcess import TextProcess
 from .Vocab import Vocab
 from .SeqDataLoader import SeqDataLoader
 from .NMT import NMT
+from .AttentionHelper import AttentionHelper
