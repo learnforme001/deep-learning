@@ -13,3 +13,7 @@ from .Vocab import Vocab
 from .SeqDataLoader import SeqDataLoader
 from .NMT import NMT
 from .AttentionHelper import AttentionHelper
+
+from .attentions import AdditiveAttention, DotProductionAttention, Seq2SeqAttentionDecoder
+
+from .EncoderDecoder import EncoderDecoder, Encoder, Decoder

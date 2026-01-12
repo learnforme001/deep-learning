@@ -1,6 +1,8 @@
 import torch
 import matplotlib.pyplot as plt
 from .Figure import Figure
+from .EncoderDecoder import Decoder
+from torch import nn
 
 class AttentionHelper:
     @classmethod
@@ -36,3 +38,40 @@ class AttentionHelper:
                     ax.set_title(titles[j])
         # 5. 添加右侧的颜色条 (Colorbar)，告诉你颜色深浅对应的数值
         fig.colorbar(pcm, ax=axes, shrink=0.6)
+
+
+    @classmethod
+    def sequence_mask(cls, X, valid_len, value = 0):
+        """序列中屏蔽不相关的项，比如填充词元"""
+        maxlen = X.size(1)
+        mask = torch.arange((maxlen), dtype=torch.float32, device=X.device)[None, :] < valid_len[:, None]
+        X[~mask] = value
+        return X
+    
+    @classmethod
+    def masked_softmax(cls, X, valid_lens):
+        """通过在最后一个轴上掩蔽元素来执行softmax操作"""
+        # X:3D张量，valid_lens:1D或2D张量
+        # X: (batch_size, query个数, key个数)
+        # valid_lens: (batch_size,) 
+        if valid_lens is None:
+            return nn.functional.softmax(X, dim=-1)
+        else:
+            shape = X.shape
+            if valid_lens.dim() == 1:
+                # 由于后续我们需要对query进行遮掩（并且拍成(batch * query, keys)），因此其valid_lens需要改变形状
+                valid_lens = torch.repeat_interleave(valid_lens, shape[1])
+            else:
+                valid_lens = valid_lens.reshape(-1)
+            # 最后一轴上被掩蔽的元素使用一个非常大的负值替换，从而其softmax输出为0
+            X = AttentionHelper.sequence_mask(X.reshape(-1, shape[-1]), valid_lens,
+                                value=-1e6)
+            return nn.functional.softmax(X.reshape(shape), dim=-1)
+        
+class AttentionDecoder(Decoder):
+    def __init__(self, **kwargs):
+        super(AttentionDecoder, self).__init__(**kwargs)
+    
+    @property
+    def attention_weights(self):
+        raise NotImplementedError
