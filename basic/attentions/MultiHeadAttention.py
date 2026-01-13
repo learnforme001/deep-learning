@@ -1,6 +1,6 @@
 from torch import nn
 import torch
-from basic import DotProductionAttention
+from basic.attentions import DotProductionAttention
 
 class MultiHeadAttention(nn.Module):
     def __init__(self, key_size, query_size, value_size, num_hiddens, num_heads, dropout, bias = False, **kwargs):
