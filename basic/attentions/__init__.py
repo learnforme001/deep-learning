@@ -1,5 +1,6 @@
 from .AdditiveAttention import AdditiveAttention
 from .DotProductionAttention import DotProductionAttention
 
-from .Seq2SeqAttentionDecoder import Seq2SeqAttentionDecoder
+from .Seq2SeqAttentionDecoder import Seq2SeqAttentionDecoder, AttentionDecoder
 from .MultiHeadAttention import MultiHeadAttention
+from .PositionalEncoding import PositionalEncoding
